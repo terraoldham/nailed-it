@@ -9,6 +9,7 @@
 import UIKit
 import Parse
 import SafariServices
+import CZPicker
 
 @objc protocol PolishLibraryViewControllerDelegate {
     @objc optional func polishColor(with polishColor: PolishColor?)
@@ -18,6 +19,7 @@ class PolishLibraryViewController: UIViewController, UICollectionViewDelegate, U
     @IBOutlet weak var collectionView: UICollectionView!
     
     var colors: [PolishColor]?
+    var brands = [String]()
     weak var delegate: PolishLibraryViewControllerDelegate?
     weak var hamburgerDelegate: HamburgerDelegate?
 
@@ -27,12 +29,23 @@ class PolishLibraryViewController: UIViewController, UICollectionViewDelegate, U
             
         self.collectionView.dataSource = self
         self.collectionView.delegate = self
+        
+        brands = ["Essie", "My Color", "Butter London"]
+        self.title = "CZPicker"
             
         let layout = self.collectionView.collectionViewLayout as? UICollectionViewFlowLayout
         layout?.estimatedItemSize = UICollectionViewFlowLayoutAutomaticSize
         
     }
     
+    @IBAction func onFilter(_ sender: Any) {
+        let picker = CZPickerView(headerTitle: "Brands", cancelButtonTitle: "Cancel", confirmButtonTitle: "Confirm")
+        picker?.delegate = self
+        picker?.dataSource = self
+        picker?.needFooterView = false
+        picker?.allowMultipleSelection = true
+        picker?.show()
+    }
     
     override func viewDidAppear(_ animated: Bool) {
         let query = PFQuery(className:"PolishColor")
@@ -143,5 +156,39 @@ extension UIImage {
         let img = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return img!
+    }
+}
+
+extension PolishLibraryViewController: CZPickerViewDelegate, CZPickerViewDataSource {
+    func numberOfRows(in pickerView: CZPickerView!) -> Int {
+        return self.brands.count
+    }
+    
+    func numberOfRowsInPickerView(pickerView: CZPickerView!) -> Int {
+        return self.brands.count
+    }
+    
+    func czpickerView(_ pickerView: CZPickerView!, titleForRow row: Int) -> String! {
+        print(brands)
+        return self.brands[row]
+    }
+    
+    func czpickerView(_ pickerView: CZPickerView!, didConfirmWithItemAtRow row: Int){
+        print(brands[row])
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
+    }
+    
+    func czpickerViewDidClickCancelButton(_ pickerView: CZPickerView!) {
+        print("Blah")
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
+    }
+    
+    func czpickerView(_ pickerView: CZPickerView!, didConfirmWithItemsAtRows rows: [AnyObject]!) {
+        print("hello")
+        for row in rows {
+            if let row = row as? Int {
+                print(self.brands[row])
+            }
+        }
     }
 }

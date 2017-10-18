@@ -464,6 +464,11 @@
                                 <action selector="onHamburgerPressed:" destination="dND-R0-v5L" id="yae-7b-zIR"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Filter" id="Qd8-Jh-uaE">
+                            <connections>
+                                <action selector="onFilter:" destination="dND-R0-v5L" id="qud-sz-qJq"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="collectionView" destination="VrZ-lV-gGb" id="z2e-Mh-NCN"/>

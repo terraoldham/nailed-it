@@ -11,4 +11,5 @@ target 'nailed-it' do
   pod 'Parse', '~> 1.15.3'
   pod 'TinyCrayon', '~> 3.0.0'
   pod 'NotificationBannerSwift'
+  pod 'CZPicker'
 end
